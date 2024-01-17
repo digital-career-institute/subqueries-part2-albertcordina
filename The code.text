@@ -1,1 +1,38 @@
+CREATE TABLE RepairTechnicians (
+    TechnicianID INT UNIQUE,
+    FirstName VARCHAR(50),
+    LastName VARCHAR(50),
+    Email VARCHAR(100),
+    Phone VARCHAR(15),
+    Address VARCHAR(255),
+    Specialization VARCHAR(100),
+    Experience_years INT
+);
+
+INSERT INTO RepairTechnicians VALUES
+(1, 'Arnold', 'Bold', 'arnoldbold@gmx.de', 45854874, 'Love street. 75', 'blacksmith', 20),
+(2, 'Jacky', 'Lee', 'jack@gmx.de', 36259854, 'Love street. 74', 'blacksmith', 11),
+(3, 'Anna', 'Travers', 'an@gmx.de', 23698547, 'Love street. 78', 'blacksmith', 11),
+(4, 'Bobby', 'Shpindel', 'bob@gmx.de', 3659852, 'Love street. 72', 'blacksmith', 10);
+
+								
+CREATE TABLE RepairJobs (
+    JobID INT UNIQUE,
+    TechnicianID INT,
+    BicycleOwner VARCHAR(100),
+    BicycleModel VARCHAR(50),
+    RepairDate DATE,
+    RepairType VARCHAR(50),
+    Cost DECIMAL(10, 2),
+    Notes TEXT,
+    FOREIGN KEY (TechnicianID) REFERENCES RepairTechnicians (TechnicianID)
+);
+
+INSERT INTO RepairJobs VALUES
+(101, 1, 'Pamela Watson', 'Sportlove', '2022-12-21', 'wheel', 55.50, 'good'),
+(102, 1, 'Kerk Watson', 'Goodcare', '2022-12-25', 'front light', 58.50, 'solved'),
+(103, 1, 'Pamela Pitt', 'QuickSpider', '2022-12-15', 'breaks', 52.50, 'done'),
+(104, 1, 'Rudy Watson', 'BlowingWind', '2022-12-16', 'peddal', 56.50, 'there'),
+(105, 1, 'Ed Corney', 'Fast', '2022-12-06', 'rear light', 14.56, 'accepted');
+
 
