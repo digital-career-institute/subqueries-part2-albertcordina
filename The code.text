@@ -35,6 +35,8 @@ INSERT INTO RepairJobs VALUES
 (104, 4, 'Rudy Watson', 'BlowingWind', '2022-12-16', 'peddal', 150.50, 'there'),
 (105, 4, 'Ed Corney', 'Fast', '2022-12-06', 'rear light', 14.56, 'accepted');
 
+
+
 -- Task: Find the average number of years of experience for technicians who have performed 
 -- repair jobs on bicycles costing more than $100. Include the technician's name and the average experience:
 
@@ -50,4 +52,81 @@ WHERE
 GROUP BY
     RT.TechnicianID, RT.FirstName, RT.LastName;
 
+-- Task: List the names of technicians who have not performed any repair jobs:
+
+SELECT
+    FirstName,
+    LastName
+FROM
+    RepairTechnicians
+WHERE
+    TechnicianID NOT IN (SELECT DISTINCT TechnicianID FROM RepairJobs);
+	
+-- Task: Find the technicians who have worked on repairs for bicycles owned by more than one person. 
+-- Include the technician's name and the count of distinct bicycle owners:
+
+SELECT
+    RT.FirstName,
+    RT.LastName,
+    COUNT(DISTINCT RJ.BicycleOwner) AS OwnerCount
+FROM
+    RepairTechnicians RT
+    JOIN RepairJobs RJ ON RT.TechnicianID = RJ.TechnicianID
+WHERE
+    EXISTS (
+        SELECT 1
+        FROM RepairJobs RJ2
+        WHERE RJ2.TechnicianID = RT.TechnicianID
+        GROUP BY RJ2.BicycleOwner
+        HAVING COUNT(DISTINCT RJ2.BicycleOwner) > 1
+    )
+GROUP BY
+    RT.TechnicianID, RT.FirstName, RT.LastName;
+
+-- Task: Identify technicians who have performed repairs on at least 5 bicycles and list the total number of repairs they have conducted. 
+-- Include the technician's name and the total number of repairs:
+
+SELECT
+    RT.FirstName,
+    RT.LastName,
+    COUNT(*) AS TotalRepairs
+FROM
+    RepairTechnicians RT
+    JOIN RepairJobs RJ ON RT.TechnicianID = RJ.TechnicianID
+GROUP BY
+    RT.TechnicianID, RT.FirstName, RT.LastName
+HAVING
+    COUNT(*) >= 5;
+
+-- Task: List the technicians who have performed repairs on bicycles with a cost between $50 and $150 OR have more than 7 years of experience. 
+-- Include the technician's name and the repair cost.
+
+SELECT
+    RT.FirstName,
+    RT.LastName,
+    RJ.Cost
+FROM
+    RepairTechnicians RT
+    JOIN RepairJobs RJ ON RT.TechnicianID = RJ.TechnicianID
+WHERE
+    (RJ.Cost BETWEEN 50 AND 150) OR (RT.Experience_years > 7);
+	
+	
+-- Task: Find technicians who have not performed any repairs on bicycles with a cost exceeding $200. 
+-- Include the technician's name and the total number of such repairs:
+
+SELECT
+    RT.FirstName,
+    RT.LastName,
+    COUNT(*) AS TotalExpensiveRepairs
+FROM
+    RepairTechnicians RT
+WHERE
+    NOT EXISTS (
+        SELECT 1
+        FROM RepairJobs RJ
+        WHERE RJ.TechnicianID = RT.TechnicianID AND RJ.Cost > 200
+    )
+GROUP BY
+    RT.TechnicianID, RT.FirstName, RT.LastName;
 
