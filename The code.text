@@ -30,9 +30,24 @@ CREATE TABLE RepairJobs (
 
 INSERT INTO RepairJobs VALUES
 (101, 1, 'Pamela Watson', 'Sportlove', '2022-12-21', 'wheel', 55.50, 'good'),
-(102, 1, 'Kerk Watson', 'Goodcare', '2022-12-25', 'front light', 58.50, 'solved'),
-(103, 1, 'Pamela Pitt', 'QuickSpider', '2022-12-15', 'breaks', 52.50, 'done'),
-(104, 1, 'Rudy Watson', 'BlowingWind', '2022-12-16', 'peddal', 56.50, 'there'),
-(105, 1, 'Ed Corney', 'Fast', '2022-12-06', 'rear light', 14.56, 'accepted');
+(102, 2, 'Kerk Watson', 'Goodcare', '2022-12-25', 'front light', 258.50, 'solved'),
+(103, 3, 'Pamela Pitt', 'QuickSpider', '2022-12-15', 'breaks', 52.50, 'done'),
+(104, 4, 'Rudy Watson', 'BlowingWind', '2022-12-16', 'peddal', 150.50, 'there'),
+(105, 4, 'Ed Corney', 'Fast', '2022-12-06', 'rear light', 14.56, 'accepted');
+
+-- Task: Find the average number of years of experience for technicians who have performed 
+-- repair jobs on bicycles costing more than $100. Include the technician's name and the average experience:
+
+SELECT
+    RT.FirstName,
+    RT.LastName,
+    AVG(RT.Experience_years) AS AvgExperience
+FROM
+    RepairTechnicians RT
+    JOIN RepairJobs RJ ON RT.TechnicianID = RJ.TechnicianID
+WHERE
+    RJ.Cost > 100
+GROUP BY
+    RT.TechnicianID, RT.FirstName, RT.LastName;
 
 
